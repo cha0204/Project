@@ -1,20 +1,9 @@
 import streamlit as st
-
 import pandas as pd
-
 import numpy as np
-
-import re
-
-import os
-
-import unicodedata
-
-import requests
-
 import folium
-
 from streamlit_folium import st_folium
+import plotly.express as px
 
 
 
