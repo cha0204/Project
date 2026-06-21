@@ -509,9 +509,7 @@ with tabs[1]:
             st.bar_chart(data=region_ranking, x='행정구역별', y='값')
 
             st.dataframe(region_ranking, use_container_width=True)
-
-
-
+            
 # --- TAB 3: 지역별 연령 구조 분석 ---
 
 with tabs[2]:
