@@ -546,7 +546,7 @@ with tabs[3]:
 
         df_hr_filt = df_hours_new[df_hours_new['시도별'] == sel_hr_reg]
 
-        st.line_chart(data=df_hr_filt, x='연도', y='값')
+        st.bar_chart(data=df_reg_hours_all, x='연도', y='값', color='취업시간별')
 
 
 
