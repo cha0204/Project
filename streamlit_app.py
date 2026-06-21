@@ -531,32 +531,41 @@ with tabs[2]:
 with tabs[3]:
     st.subheader("⏱️ 5년 주기 근로 시간 비중 (도넛 차트 분석)")
     
-    if not df_reg.empty:
-        # 1. 시각화할 데이터 준비
-        df_hours_bars = df_reg[
-            (df_reg['취업시간별'] != '계') & 
-            (df_reg['취업시간별'] != '주당평균취업시간(시간)')
-        ].copy()
+    # 1. 데이터가 로드되었는지 먼저 확인
+    if 'df_hours_new' in locals() and not df_hours_new.empty:
+        hours_regions = [r for r in df_hours_new['시도별'].unique() if r != '계']
+        selected_hours_region = st.selectbox("📍 분석 지역 선택", hours_regions, key="hours_reg_select")
         
-        years = sorted(df_hours_bars['연도'].unique())
+        # 2. 변수 df_reg를 여기서 먼저 선언합니다.
+        df_reg = df_hours_new[df_hours_new['시도별'] == selected_hours_region].copy()
         
-        # 2. 5개의 컬럼으로 분할하여 파이 차트 배치
-        cols = st.columns(len(years))
-        
-        for i, year in enumerate(years):
-            df_year = df_hours_bars[df_hours_bars['연도'] == year]
+        # 3. 선언된 변수를 조건문에서 사용
+        if not df_reg.empty:
+            df_hours_bars = df_reg[
+                (df_reg['취업시간별'] != '계') & 
+                (df_reg['취업시간별'] != '주당평균취업시간(시간)')
+            ].copy()
             
-            # Plotly 도넛 차트 생성
-            fig = px.pie(df_year, values='값', names='취업시간별', 
-                         hole=0.4, # 도넛 모양으로 만들기
-                         title=f"{year}년")
-            fig.update_layout(showlegend=False, margin=dict(t=40, b=0, l=0, r=0))
+            years = sorted(df_hours_bars['연도'].unique())
+            cols = st.columns(len(years))
             
-            with cols[i]:
-                st.plotly_chart(fig, use_container_width=True)
-        
-        st.caption("💡 5년 동안 근무 시간대별 비중이 어떻게 변화하는지 도넛 차트로 한눈에 비교합니다.")
-
+            for i, year in enumerate(years):
+                df_year = df_hours_bars[df_hours_bars['연도'] == year]
+                
+                # Plotly 도넛 차트 생성
+                fig = px.pie(df_year, values='값', names='취업시간별', 
+                             hole=0.4, 
+                             title=f"{year}년")
+                fig.update_layout(showlegend=False, margin=dict(t=40, b=0, l=0, r=0))
+                
+                with cols[i]:
+                    st.plotly_chart(fig, use_container_width=True)
+            
+            st.caption("💡 5년 동안 근무 시간대별 비중이 어떻게 변화하는지 도넛 차트로 한눈에 비교합니다.")
+        else:
+            st.warning("선택된 지역의 데이터가 없습니다.")
+    else:
+        st.error("근로 시간 데이터가 로드되지 않았습니다.")
 # --- TAB 4: 지역별 취업시간 패턴 ---
 import plotly.express as px
 
