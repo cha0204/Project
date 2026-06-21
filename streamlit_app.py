@@ -568,7 +568,6 @@ with tabs[3]:
     else:
         st.error("취업 시간 데이터셋을 불러올 수 없습니다.")
 
-
 # --- TAB 5: 원본 데이터 ---
 
 with tabs[4]:
