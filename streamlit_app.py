@@ -528,6 +528,44 @@ with tabs[2]:
 
             st.bar_chart(data=df_age_filt, x='연도', y='값', color='연령계층별1')
 
+with tabs[3]:
+    st.subheader("⏱️ 5년 주기 근로 시간 스타일 변화 분석")
+    
+    if not df_hours_new.empty:
+        hours_regions = [r for r in df_hours_new['시도별'].unique() if r != '계']
+        selected_hours_region = st.selectbox("📍 분석 지역 선택", hours_regions, key="hours_reg_select")
+        
+        # 1. 데이터 필터링 및 변수 선언 (가장 먼저 수행)
+        df_reg = df_hours_new[df_hours_new['시도별'] == selected_hours_region].copy()
+        
+        # 2. 필수 변수들 정의 (조건문에 상관없이 항상 정의되도록 설계)
+        df_hours_bars = df_reg[
+            (df_reg['취업시간별'] != '계') & 
+            (df_reg['취업시간별'] != '주당평균취업시간(시간)')
+        ].copy()
+        
+        df_hours_metrics = df_reg[df_reg['취업시간별'] == '주당평균취업시간(시간)'].copy()
+        
+        # 3. 데이터가 있을 때만 시각화 수행
+        if not df_hours_bars.empty:
+            # 100% 누적 막대 데이터 변환
+            df_pivot = df_hours_bars.pivot(index='연도', columns='취업시간별', values='값')
+            df_pct = df_pivot.div(df_pivot.sum(axis=1), axis=0) * 100
+            
+            col1, col2 = st.columns([1.5, 1])
+            
+            with col1:
+                # 🌟 이제 에러 없이 실행됩니다.
+                fig = px.bar(df_pct, barmode='stack', title=f"{selected_hours_region} 근로 시간 비중(%)")
+                st.plotly_chart(fig, use_container_width=True)
+            
+            with col2:
+                if not df_hours_metrics.empty:
+                    fig2 = px.line(df_hours_metrics, x='연도', y='값', markers=True, title="평균 근로 시간(시간)")
+                    st.plotly_chart(fig2, use_container_width=True)
+        else:
+            st.info("해당 지역의 상세 근로 시간 데이터가 없습니다.")
+
 
 
 # --- TAB 4: 지역별 취업시간 패턴 ---
