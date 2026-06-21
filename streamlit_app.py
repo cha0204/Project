@@ -460,15 +460,24 @@ with tabs[0]:
 
             df_region_trend = df_base[df_base['행정구역별'] == current_region].groupby('연도')['값'].sum().reset_index().sort_values('연도')
 
-            if not df_region_trend.empty:
-
-                st.bar_chart(data=df_region_trend, x='연도', y='값', color='#ff4b4b')
-
-                st.dataframe(df_region_trend.rename(columns={'연도': '조회 연도', '값': '인구수'}), hide_index=True, use_container_width=True)
-
-            else:
-
-                st.info("지역을 클릭하면 데이터가 표시됩니다.")
+            # --- 탭의 데이터프레임 표시 부분 수정 예시 ---
+if "biz" in data:
+    df = data["biz"]
+    # 콤마 표시를 위해 format을 지정한 데이터프레임 표기
+    st.dataframe(
+        df,
+        column_config={
+            "2024": st.column_config.NumberColumn(
+                "2024년 사업체 수",
+                format="%d" # 콤마가 필요하면 format="%,d" 로 변경
+            )
+        },
+        use_container_width=True
+    )
+    
+    # 막대 그래프용 데이터 (여기는 숫자 그대로 유지해야 차트가 그려짐)
+    chart_data = df.groupby('산업별')['2024'].sum()
+    st.bar_chart(chart_data)
 
 
 
