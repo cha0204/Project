@@ -1,9 +1,13 @@
 import streamlit as st
 import pandas as pd
 import numpy as np
+import re
+import os
+import unicodedata  # 🌟 이 부분이 꼭 있어야 합니다!
+import requests
 import folium
 from streamlit_folium import st_folium
-import plotly.express as px
+import plotly.express as px  # 🌟 이 부분도 있어야 파이 차트가 됩니다!
 
 
 
