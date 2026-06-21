@@ -533,21 +533,40 @@ with tabs[2]:
 
 
 # --- TAB 4: 지역별 취업시간 패턴 ---
-
 with tabs[3]:
-
-    st.subheader("⏱️ 지역별 근로 시간 스타일 분석")
-
+    st.subheader("⏱️ 지역별 근로 시간 스타일 및 환경 분석")
+    
     if not df_hours_new.empty:
-
-        hr_regions = [r for r in df_hours_new['시도별'].unique() if r != '계']
-
-        sel_hr_reg = st.selectbox("📍 지역 선택", hr_regions)
-
-        df_hr_filt = df_hours_new[df_hours_new['시도별'] == sel_hr_reg]
-
-        st.bar_chart(data=df_reg_hours_all, x='연도', y='값', color='취업시간별')
-
+        hours_regions = [r for r in df_hours_new['시도별'].unique() if r != '계']
+        selected_hours_region = st.selectbox("📍 근무 형태를 조회할 지역 선택", hours_regions, key="hours_reg_select")
+        
+        # 🌟 여기서 변수를 명확하게 정의합니다!
+        df_reg_hours_all = df_hours_new[df_hours_new['시도별'] == selected_hours_region].copy()
+        
+        # 데이터가 비어있지 않은지 한번 더 체크
+        if not df_reg_hours_all.empty:
+            df_hours_metrics = df_reg_hours_all[df_reg_hours_all['취업시간별'] == '주당평균취업시간(시간)']
+            
+            # 여기서 에러가 나지 않도록 데이터 프레임 형태 확인
+            df_hours_bars = df_reg_hours_all[
+                (df_reg_hours_all['취업시간별'] != '계') & 
+                (df_reg_hours_all['취업시간별'] != '주당평균취업시간(시간)')
+            ]
+            
+            col1, col2 = st.columns(2)
+            with col1:
+                st.write(f"📊 **{selected_hours_region}의 시간대별 취업자 수**")
+                # 🌟 수정: 막대 차트로 변경하여 톱니 현상 방지
+                st.bar_chart(data=df_hours_bars, x='연도', y='값', color='취업시간별')
+                
+            with col2:
+                st.write(f"⏱️ **{selected_hours_region}의 평균 근로 시간**")
+                if not df_hours_metrics.empty:
+                    st.line_chart(data=df_hours_metrics, x='연도', y='값')
+        else:
+            st.warning("해당 지역의 데이터가 존재하지 않습니다.")
+    else:
+        st.error("취업 시간 데이터셋을 불러올 수 없습니다.")
 
 
 # --- TAB 5: 원본 데이터 ---
