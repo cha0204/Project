@@ -10,7 +10,7 @@ from streamlit_folium import st_folium
 
 # --- [1] 페이지 설정 ---
 st.set_page_config(page_title="전공군별 지역/연령/시간 고용 분석 대시보드", layout="wide")
-st.title("📊 대한민국 전공·지역·연령·취업시간 통합 고용 분석 대시보드")
+st.title("📊 내 전공은 이건데 어디로 가야하지?")
 
 # --- [2] 유틸리티 및 정제 함수 ---
 def clean_string(text):
