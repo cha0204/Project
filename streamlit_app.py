@@ -585,5 +585,6 @@ st.caption("### 📋 데이터 출처 및 참고 문헌")
 st.caption("""
 - **KOSIS (통계청):** [경제활동인구조사(청년층 부가조사)](https://kosis.kr/)
 - **고용노동부:** [사업체노동실태현황](https://www.moel.go.kr/)
+- **청년일자리지원서비스** (https://opendata.alio.go.kr/new/main.do)
 - 본 데이터는 2021년부터 2025년까지의 시계열 자료를 바탕으로 재가공되었습니다.
 """)
