@@ -579,3 +579,11 @@ with tabs[4]:
     st.subheader("원본 데이터셋")
 
     st.dataframe(df_hours_new, use_container_width=True)
+# 코드의 가장 마지막 부분이나 탭 구성 이후에 배치
+st.divider() # 가로 줄 긋기
+st.caption("### 📋 데이터 출처 및 참고 문헌")
+st.caption("""
+- **KOSIS (통계청):** [경제활동인구조사(청년층 부가조사)](https://kosis.kr/)
+- **고용노동부:** [사업체노동실태현황](https://www.moel.go.kr/)
+- 본 데이터는 2021년부터 2025년까지의 시계열 자료를 바탕으로 재가공되었습니다.
+""")
